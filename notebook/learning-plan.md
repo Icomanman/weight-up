@@ -4,13 +4,13 @@
 
 > **Primary Objective**
 >
-> Use a real-world personal health dataset as a vehicle to learn modern data engineering,
-> statistics, machine learning, and AI engineering through building a complete end-to-end
-> software system.
+> Build on 5+ years of software engineering experience to develop practical data engineering,
+> analytical, statistical, and probabilistic reasoning through a real-world personal dataset.
 >
-> The health insights themselves are secondary.
+> The health insights are secondary; this is a self-study project, not a formally assessed course.
 >
-> The primary deliverable is a significant increase in engineering capability.
+> The primary deliverable is demonstrated data capability, supported by working artefacts,
+> independent checks, clear explanations, and transfer to a different dataset.
 
 ---
 
@@ -27,7 +27,7 @@ By completing this project, I should be able to confidently:
 
 #### Evidence
 
-I can draw the system architecture on a whiteboard and explain every component without referring to documentation.
+I can draw the data flow and explain its boundaries, trade-offs, and failure modes without relying on undocumented assumptions.
 
 ---
 
@@ -41,7 +41,7 @@ I can draw the system architecture on a whiteboard and explain every component w
 
 #### Evidence
 
-Given a completely new data source, I can integrate it into the platform in less than one day.
+I can integrate a different data source by investigating its contract, mapping its data, testing its failure modes, and explaining the changes required.
 
 ---
 
@@ -71,23 +71,23 @@ I can answer questions using data instead of intuition.
 
 ---
 
-### Statistics
+### Statistics and Probability
 
-- Explain variability.
-- Quantify uncertainty.
-- Interpret correlations correctly.
-- Avoid common statistical mistakes.
-- Understand the assumptions behind statistical methods.
+- Explain probability, conditional probability, independence, and expected value.
+- Apply Bayes' rule and account for base rates when interpreting evidence.
+- Understand distributions, sampling variability, and how sample size affects uncertainty.
+- Interpret confidence intervals, hypothesis tests, and regression results appropriately.
+- Recognise confounding, selection effects, temporal dependence, and the limits of causal claims.
 
 #### Evidence
 
-I can explain *why* a statistical conclusion is valid, not just compute it.
+I can explain a statistical conclusion in context, check it against a known or simulated example, and identify assumptions that could change it.
 
 ---
 
 ### Time-Series Analysis
 
-- Recognize trends.
+- Recognise trends.
 - Identify seasonality.
 - Engineer lag-based features.
 - Handle temporal dependencies.
@@ -99,6 +99,8 @@ I naturally think about time when designing analyses instead of treating every o
 ---
 
 ### Machine Learning
+
+Optional extension:
 
 - Formulate prediction problems.
 - Build training datasets.
@@ -114,6 +116,8 @@ I know why one model performs better than another rather than simply accepting b
 
 ### AI Engineering
 
+Optional extension:
+
 - Design AI applications around structured data.
 - Build LLM-assisted workflows.
 - Use structured outputs.
@@ -128,15 +132,7 @@ I can clearly explain why a particular AI component exists and what problem it s
 
 ### Software Engineering
 
-- Build maintainable Python projects.
-- Organise code into reusable modules.
-- Test critical components.
-- Automate workflows.
-- Package the application for deployment.
-
-#### Evidence
-
-Another developer could clone the repository and understand its structure with minimal guidance.
+Apply existing software engineering strengths where they support the data work; revisit these topics only when the project exposes a specific gap.
 
 ---
 
@@ -155,19 +151,24 @@ I am comfortable building systems using technologies I have never used before.
 
 ## Success Criteria
 
-The project is successful when the following statements are true.
+Use these criteria for self-review, not as a formal grading rubric. The core path is data acquisition, data reliability and modelling, analysis, and statistics and probability. Machine learning and AI are optional extensions.
 
 ### Technical
 
-- [ ] Data collection is fully automated.
-- [ ] The entire platform can be rebuilt from scratch.
+- [ ] Selected sources can be collected repeatably within their access constraints, with manual steps documented.
+- [ ] The data model and analysis can be recreated from documented raw inputs and processing steps.
 - [ ] New data sources are straightforward to integrate.
 - [ ] Pipelines are reliable and repeatable.
 - [ ] Data quality issues are detected automatically.
-- [ ] The database supports analytical queries efficiently.
+- [ ] The database supports intended analytical questions without unnecessary complexity.
+- [ ] At least one analytical result can be reproduced from documented inputs and steps.
+- [ ] Statistical conclusions include appropriate checks, assumptions, and uncertainty.
+
+Optional extensions:
+
 - [ ] The dashboard updates automatically.
-- [ ] Machine learning models can be retrained without manual intervention.
-- [ ] AI features consume structured data rather than manually assembled prompts.
+- [ ] A predictive model is compared with a simple baseline and evaluated without data leakage.
+- [ ] An AI feature uses controlled access to structured data and is checked against representative failure cases.
 
 ---
 
@@ -177,13 +178,17 @@ I can explain, from memory:
 
 - [ ] ETL vs ELT
 - [ ] Data normalisation
-- [ ] Feature engineering
+- [ ] Data grain, provenance, and idempotent ingestion
+- [ ] Data quality dimensions and schema evolution
+- [ ] Probability, conditional probability, Bayes' rule, and independence
+- [ ] Sampling variability and common distributions
+- [ ] Confidence intervals and hypothesis tests
+- [ ] Confounding, temporal dependence, and correlation vs causation
 - [ ] Time-series analysis
-- [ ] Regression
-- [ ] Model evaluation
-- [ ] Correlation vs causation
-- [ ] Overfitting
-- [ ] Data leakage
+
+Optional extensions:
+
+- [ ] Feature engineering, model evaluation, overfitting, and data leakage
 - [ ] Precision, recall, and accuracy
 - [ ] Why an LLM is not a machine learning model in the traditional sense
 
@@ -197,11 +202,15 @@ Without following a tutorial, I can:
 - [ ] Design a relational schema.
 - [ ] Clean inconsistent data.
 - [ ] Perform exploratory data analysis.
-- [ ] Build visualizations.
-- [ ] Train a predictive model.
-- [ ] Evaluate its performance.
-- [ ] Deploy an automated pipeline.
-- [ ] Build an AI assistant over the dataset.
+- [ ] Build visualisations.
+- [ ] Query and aggregate data without changing its intended grain.
+- [ ] Analyse uncertainty using a worked or simulated example.
+- [ ] Reproduce and critique an analytical result.
+
+Optional extensions:
+
+- [ ] Train and evaluate a predictive model.
+- [ ] Build an AI assistant over the dataset with explicit data-access boundaries.
 
 ---
 
@@ -219,11 +228,11 @@ Including the architecture and engineering trade-offs.
 
 #### A data scientist
 
-Including the statistical assumptions and model choices.
+Including the question, data-generating process, statistical assumptions, uncertainty, and limits of inference.
 
-#### An AI engineer
+#### An engineer working with data
 
-Including why traditional analytics, machine learning, and LLMs each play different roles.
+Including why data engineering, statistical analysis, and (if used) machine learning or LLMs each play different roles.
 
 ---
 
@@ -231,8 +240,10 @@ Including why traditional analytics, machine learning, and LLMs each play differ
 
 The project is complete when I no longer think of it as "a health tracker."
 
-Instead, I recognize it as a complete software system that happens to use health data.
+Instead, I recognise it as a complete software system that happens to use health data.
 
 If someone replaced the health data with financial transactions, IoT sensor readings, manufacturing telemetry, or structural monitoring data, I should know exactly how to adapt the architecture.
 
 That transferability—not the health insights—is the real measure of success.
+
+Because there is no external assessor, use more than self-confidence to judge progress: retain working artefacts, check calculations against known or simulated cases, document assumptions and limitations, and attempt at least one small transfer task using a different dataset.

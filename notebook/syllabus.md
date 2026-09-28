@@ -6,7 +6,7 @@
 
 ## Project Mission
 
-Build a personal health analytics platform that collects, stores, analyses, and learns from personal health data.
+Build a personal health data platform that collects, stores, validates, and analyses personal data.
 
 The system will integrate:
 
@@ -16,21 +16,20 @@ The system will integrate:
 - Exercise data
 - Other personal data sources over time
 
-However, the health domain is only the vehicle.
+The learner is an experienced software engineer. The project should build on existing engineering skills rather than spend time re-teaching general software design, testing, and modularity.
 
-The actual objective is to develop transferable engineering capability in:
+The health domain is only the vehicle.
 
-- Software architecture
+The core objective is to develop transferable capability in:
+
 - Data engineering
 - Database design
-- Analytics
-- Statistics
-- Machine learning
-- AI engineering
+- Analytical workflows
+- Statistics and probability, including a practical refresher
 
-The final outcome is not a health application.
+Machine learning and AI are optional extensions, not prerequisites for completing the core learning path.
 
-The final outcome is the ability to design and build data-driven software systems.
+The final outcome is the ability to design data workflows, analyse data reproducibly, reason about uncertainty, and explain the evidence and limitations.
 
 ---
 
@@ -52,7 +51,7 @@ Learning happens through the following loop:
 
 6. Reflect
 
-7. Teach
+7. Explain and transfer
 ```
 
 The order matters.
@@ -60,6 +59,8 @@ The order matters.
 The project creates the problems.
 
 The problems determine what needs to be learned.
+
+There is no formal assessor. Learning is self-directed: retain artefacts, check work against known or simulated examples, explain assumptions and limitations, and try the method on a different dataset. Self-confidence alone is not evidence of correctness.
 
 ---
 
@@ -85,7 +86,7 @@ The project progresses through engineering capability stages.
 
 ---
 
-### Phase 1: Build the Data Foundation
+### Phase 1: Build the Data Foundation (Core)
 
 #### Engineering Challenge
 
@@ -103,32 +104,30 @@ Sources:
 
 Examples:
 
-- How does Bluetooth communication work?
-- How do APIs work?
+- How do the available APIs, exports, or device interfaces work?
 - How do I store raw data?
 - How do I handle failures?
 - How do I avoid duplicate imports?
+- How do I know whether collection is complete and current?
 
 ---
 
 #### Concepts Learned
 
-- Data ingestion
-- APIs
-- Bluetooth communication
-- ETL foundations
-- Raw data storage
-- Event-based thinking
+- Source contracts and access constraints
+- Batch and incremental ingestion
+- Raw data preservation and provenance
+- Idempotency, recovery, and observability
 
 ---
 
 #### Deliverable
 
-A working ingestion system.
+A repeatable ingestion workflow for the selected sources, with source-access constraints and any manual steps documented.
 
 ---
 
-### Phase 2: Build Data Reliability
+### Phase 2: Build Data Reliability and Models (Core)
 
 #### Engineering Challenge
 
@@ -145,6 +144,8 @@ Examples:
 - Different formats
 - Incorrect timestamps
 - Unit mismatches
+- Schema changes
+- Ambiguous records and conflicting measurements
 
 ---
 
@@ -152,19 +153,20 @@ Examples:
 
 - Data quality
 - Data validation
-- Data cleaning
+- Repeatable data transformation
 - Database modelling
 - Schema design
+- Units, timestamps, and provenance
 
 ---
 
 #### Deliverable
 
-A reliable data platform.
+A data model and repeatable validation workflow with documented quality rules and known limitations.
 
 ---
 
-### Phase 3: Understand the Data
+### Phase 3: Analyse the Data (Core)
 
 #### Engineering Challenge
 
@@ -179,14 +181,16 @@ Examples:
 - How should data be explored?
 - Which patterns matter?
 - How do I avoid misleading conclusions?
+- Are joins and aggregations preserving the intended unit of analysis?
 
 ---
 
 #### Concepts Learned
 
 - Exploratory data analysis
-- Visualization
-- Statistics
+- Visualisation
+- SQL and analytical queries
+- Reproducible analysis
 - Analytical reasoning
 
 ---
@@ -197,7 +201,39 @@ An analytics layer.
 
 ---
 
-### Phase 4: Learn From Data
+### Phase 4: Reason About Probability and Uncertainty (Core)
+
+#### Engineering Challenge
+
+"How strong is the evidence, and what uncertainty remains?"
+
+#### Problems Encountered
+
+Examples:
+
+- How much would a result vary if I collected another sample?
+- What do probability, independence, and conditional probability mean for this data?
+- What does a confidence interval or p-value actually say?
+- How can confounding or temporal dependence mislead me?
+- Which claims are justified, and which would imply causation without evidence?
+
+#### Concepts Learned
+
+- Probability and conditional probability
+- Bayes' rule and base rates
+- Distributions and expected value
+- Sampling variability
+- Confidence intervals and hypothesis tests
+- Regression, confounding, and limits of inference
+- Time dependence and autocorrelation
+
+#### Deliverable
+
+A reproducible analysis that explains its assumptions, uncertainty, and limits, checked against a known or simulated example.
+
+---
+
+### Phase 5: Learn From Data (Optional Extension)
 
 #### Engineering Challenge
 
@@ -230,7 +266,7 @@ Predictive experiments.
 
 ---
 
-### Phase 5: Add Intelligence
+### Phase 6: Add Intelligence (Optional Extension)
 
 #### Engineering Challenge
 
@@ -298,14 +334,14 @@ I can investigate unfamiliar datasets.
 #### Evidence
 
 - I can clean data.
-- I can visualize patterns.
+- I can visualise patterns.
 - I can explain conclusions.
 
 ---
 
 ### Apply Statistics
 
-I can reason about uncertainty.
+I can reason about probability, sampling variability, uncertainty, and limitations of inference.
 
 #### Evidence
 
@@ -315,6 +351,8 @@ I can reason about uncertainty.
 ---
 
 ### Apply Machine Learning
+
+Optional extension:
 
 I can build and evaluate models.
 
@@ -328,6 +366,8 @@ I can build and evaluate models.
 
 ### Build AI Systems
 
+Optional extension:
+
 I can integrate AI into software systems.
 
 #### Evidence
@@ -337,17 +377,18 @@ I can integrate AI into software systems.
 
 ---
 
-## Success Criteria
+## Core Success Criteria
 
-The project succeeds when:
+Use these as evidence prompts, not a formal grading rubric. The core project succeeds when:
 
 ### Technical
 
 - Data collection is automated.
-- Data storage is reliable.
-- Analysis is reproducible.
-- Models can be trained from collected data.
-- AI can interact with structured data.
+- Data quality rules and known limitations are documented and checked.
+- The data model supports the intended analytical questions.
+- At least one analysis can be reproduced from documented inputs and steps.
+- Statistical reasoning is checked against known, simulated, or independently computed examples.
+- Conclusions describe uncertainty and avoid claims the evidence cannot support.
 
 ---
 
@@ -355,10 +396,10 @@ The project succeeds when:
 
 I can explain:
 
-- Why the architecture exists.
-- Why alternatives were rejected.
-- What trade-offs were made.
-- What limitations remain.
+- How data moves through the system and why the main boundaries exist.
+- Why alternatives were rejected and what trade-offs were made.
+- What assumptions, quality issues, and limitations remain.
+- How I checked the results and what evidence would change my conclusion.
 
 ---
 
@@ -392,6 +433,6 @@ Those are separate projects.
 >
 > Problems create learning.
 >
-> Solutions create capability.
+> Evidence supports capability.
 >
 > Reflection creates expertise.

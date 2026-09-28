@@ -10,6 +10,8 @@ Resources are organised by capability, not by project phase.
 
 A resource becomes relevant when the corresponding engineering problem appears.
 
+Use this map as a just-in-time reference, not a reading queue. Existing software engineering skills are assumed; revisit those resources only when a concrete project problem exposes a gap.
+
 Recommended workflow:
 
 ```
@@ -134,29 +136,31 @@ I can answer analytical questions from structured data.
 
 ---
 
-## Statistics
+## Statistics and Probability
 
 ### Think Stats
 Allen Downey
 
 Purpose:
 
-Develop statistical intuition through programming.
+Refresh probability and statistical reasoning through programming and practical examples.
 
 Focus:
 
 - Distributions
 - Probability
+- Sampling variability
 - Hypothesis testing
 - Regression
+- Uncertainty and interpretation
 
 Learning Outcome:
 
-I can reason about uncertainty.
+I can reason about probability, sampling variability, uncertainty, and the limitations of statistical conclusions.
 
 ---
 
-## Data Visualization
+## Data Visualisation
 
 ### Storytelling with Data
 Cole Nussbaumer Knaflic
@@ -199,7 +203,7 @@ I understand why time-series data requires different thinking.
 
 ---
 
-## Machine Learning
+## Machine Learning (Optional Extension)
 
 ### Hands-On Machine Learning with Scikit-Learn, Keras & TensorFlow
 Aurélien Géron
@@ -224,7 +228,7 @@ I can build and evaluate practical models.
 
 ---
 
-## AI Engineering
+## AI Engineering (Optional Extension)
 
 ### Designing Machine Learning Systems
 Chip Huyen
