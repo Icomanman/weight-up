@@ -3,6 +3,7 @@
 *.tmp.*
 *.pdf
 .github
+*.obsidian
 
 __pycache__/
 *.py[cod]
