@@ -19,6 +19,7 @@ def authorise_on_behalf() -> None:
     connection.request("GET", f"{auth_endpoint}/{resource}")
     response: HTTPResponse = connection.getresponse()
     print(response.status, response.reason)
+    connection.close()
 
 
 if __name__ == "__main__":

@@ -77,6 +77,7 @@ I am merely making assumptions on 3, but haven't done anything. I started with F
 ~~~
 
 * What is "3-legged OAuth" and how does it work?
+- Found this link: https://platform.fatsecret.com/docs/guides/authentication/oauth1/three-legged-oauth
 
 ~~~
 
