@@ -70,6 +70,9 @@ Use these questions to define the challenge:
 3. Weighing scale. Idk yet but I found something via Bluetooth.
 
 I am merely making assumptions on 3, but haven't done anything. I started with FatSecret API first.
+
+02 October 2026
+*  Bluetooth: I found Bleak library for Python
 ~~~
 
 ### Questions
