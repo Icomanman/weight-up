@@ -1,52 +1,56 @@
 import os
 from dataclasses import dataclass
 from dotenv import load_dotenv
-from http.client import HTTPConnection, HTTPResponse
+from requests_oauthlib import OAuth1Session
 
 load_dotenv()
 
 
 @dataclass
-class DevAccount:
-    api_key: str
-    api_secret: str
+class RequestToken:
+    token: str
+    token_secret: str
 
 
-def _request_token(connection: HTTPConnection) -> None:
-    resource: str = os.getenv("TOKEN_RESOURCE")
-    consumer_key: str = os.getenv("CONSUMER_KEY")
-    sign_method: str = "HMAC-SHA1"
-    connection.request(
-        "POST",
-        f"{resource}??oauth_consumer_key={consumer_key}"
+def _request_token(oauth_session: OAuth1Session) -> RequestToken:
+    auth_endpoint: str = os.environ["AUTH_ENDPOINT"].rstrip("/")
+    token_resource: str = os.environ["TOKEN_RESOURCE"].lstrip("/")
+    request_token_url = f"https://{auth_endpoint}/{token_resource}"
+    token_data: dict[str, str] = oauth_session.fetch_request_token(
+        request_token_url
     )
-    response: HTTPResponse = connection.getresponse()
-    print(response.status, response.reason)
+    return RequestToken(
+        token=token_data["oauth_token"],
+        token_secret=token_data["oauth_token_secret"],
+    )
 
 
-def _authorise_on_behalf(connection: HTTPConnection) -> None:
+def _authorise_on_behalf(oauth_session: OAuth1Session) -> None:
     pass
 
 
-def _get_access_token(connection: HTTPConnection) -> str:
+def _get_access_token(oauth_session: OAuth1Session) -> str:
     return ""
 
 
-def auth() -> None:
-    auth_endpoint: str = os.getenv("AUTH_ENDPOINT")
-    connection: HTTPConnection = HTTPConnection(host=auth_endpoint)
+def auth() -> dict[str, str]:
+    session: OAuth1Session = OAuth1Session(
+        client_key=os.environ["CONSUMER_KEY"],
+        client_secret=os.environ["CONSUMER_SECRET"],
+        callback_uri="oob",
+        signature_type="BODY",
+    )
+    # Request Token
+    _request_token(session)
+    # Authorise on behalf
 
-    # request token
-    _request_token(connection)
+    # Get Access Token
 
-    # authorise on behalf of the user
-
-    # access token
-
-    connection.close()
+    session.close()
 
 
 if __name__ == "__main__":
     auth()
 
-__all__ = ["DevAccount", "auth"]
+
+__all__ = ["RequestToken", "auth"]
