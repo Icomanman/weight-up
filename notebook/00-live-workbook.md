@@ -73,6 +73,27 @@ I am merely making assumptions on 3, but haven't done anything. I started with F
 
 02 October 2026
 *  Bluetooth: I found Bleak library for Python
+
+04 October 2026
+* The bluetooth approach is limited to single data point - tapping live onto the scale.
+* For historical data, I found an alternative to explore: the request-response cycle from the mobile app to Xiaomi cloud. No official endpoints publicly published though so this is some kind of "reverse-engineering" approach over my own wifi network.
+* Alternatively, I looked into the mobile app and trying to find out if there's some accessible local db. This is much more elaborate than I thought and also manual - I don't like this. I'd rather jump straight on the cloud approach.
+
+* This involves side quests though; learning about:
+- Xiaomi ecosystem, its auth flow(s), API design, perhaps even its data modelling
+- Using `HTTP Toolkit`; WireShark is much more low-level for this purpose?
+
+
+Found endpoints:
+- account.xiaomi.com
+
+- sg.stream.api.mija.tech
+
+- sg.core.api.io.mi.com
+- sg.api.io.mi.com
+- sg.home.mi.com
+- api.account.xiaomi.com
+
 ~~~
 
 ### Questions
@@ -81,6 +102,19 @@ I am merely making assumptions on 3, but haven't done anything. I started with F
 
 * What is "3-legged OAuth" and how does it work?
 - Found this link: https://platform.fatsecret.com/docs/guides/authentication/oauth1/three-legged
+
+On Xiaomi:
+1. Where does history come from?
+- Local DB?
+- Cloud endpoint?
+
+2. How is authentication performed?
+- Username/password
+- OAuth
+- Xiaomi SSO
+- Device-bound tokens
+
+3. Are requests signed?
 
 ~~~
 
