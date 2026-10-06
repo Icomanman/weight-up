@@ -5,6 +5,8 @@
 .github
 *.obsidian
 
+/third-party
+
 __pycache__/
 *.py[cod]
 *$py.class

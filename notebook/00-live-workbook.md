@@ -94,6 +94,18 @@ Found endpoints:
 - sg.home.mi.com
 - api.account.xiaomi.com
 
+05 October 2026
+
+Paths explored:
+* Support → no official API.
+* BLE → only current/live measurements, not history.
+* HTTP Toolkit → Android certificate wall.
+* Existing Go implementation → authentication/config issues.
+* Local log file → appears to be a binary log, not an obvious datastore.
+
+06 October 2026
+* Found a C#/MAUI mobile app on GitHub which I can extract the services from and compile as a CLI perhaps.
+
 ~~~
 
 ### Questions
