@@ -1,0 +1,71 @@
+{
+    "month": {
+        "day": [
+            {
+                "calories": "2756",
+                "carbohydrate": "238.43",
+                "date_int": "20727",
+                "fat": "116.20",
+                "protein": "150.68"
+            },
+            {
+                "calories": "2595",
+                "carbohydrate": "193.40",
+                "date_int": "20728",
+                "fat": "115.97",
+                "protein": "143.70"
+            },
+            {
+                "calories": "2490",
+                "carbohydrate": "209.27",
+                "date_int": "20729",
+                "fat": "111.35",
+                "protein": "156.17"
+            },
+            {
+                "calories": "1699",
+                "carbohydrate": "97.19",
+                "date_int": "20730",
+                "fat": "64.81",
+                "protein": "167.78"
+            },
+            {
+                "calories": "1683",
+                "carbohydrate": "99.71",
+                "date_int": "20731",
+                "fat": "68.62",
+                "protein": "161.42"
+            },
+            {
+                "calories": "1714",
+                "carbohydrate": "112.53",
+                "date_int": "20732",
+                "fat": "66.24",
+                "protein": "159.43"
+            },
+            {
+                "calories": "1607",
+                "carbohydrate": "94.57",
+                "date_int": "20733",
+                "fat": "72.00",
+                "protein": "138.31"
+            },
+            {
+                "calories": "1584",
+                "carbohydrate": "97.24",
+                "date_int": "20734",
+                "fat": "88.38",
+                "protein": "100.41"
+            },
+            {
+                "calories": "1862",
+                "carbohydrate": "152.44",
+                "date_int": "20735",
+                "fat": "75.81",
+                "protein": "134.87"
+            }
+        ],
+        "from_date_int": "20727",
+        "to_date_int": "20757"
+    }
+}
