@@ -106,6 +106,11 @@ Paths explored:
 06 October 2026
 * Found a C#/MAUI mobile app on GitHub which I can extract the services from and compile as a CLI perhaps.
 
+09 October 2026
+* I messaged the author of the C#/MAUI mobile app the other day to ask whether he knows other auth methods; he pointed me to another repo - looks promising.
+* The Xiaomi section makes me go in circles, haven't gotten past auth methods; this prevented me from building proper momentum on the whole project.
+* Pivoted to first attempt on FatSecret API. I got a sample record for the month to date (in json). Good progress. Extracted it via Postman. Started working with Python implementation.
+
 ~~~
 
 ### Questions
@@ -154,7 +159,9 @@ Build small experiments:
 
 ~~~
 
+09 October 2026
 
+I've been running circles looking for ways to build the auth for the Xiaomi cloud. I def don't want to do this manually. Heaps of reverse engineering I tried trying to intercept the traffic and understand the protocol, looked for endpoints, and explored various authentication methods.
 
 ~~~
 
@@ -164,6 +171,9 @@ Build:
 
 ~~~
 
+09 October 2026
+
+The bulk of my work from hitherto are mostly about exploring possible data acquisition from the 3 different sources. The FatSecret slice is where I started (auth) and now I successfully proven that I can pull my data from their API. I am now doing the Python implementation to pull and process the rest.
 
 
 ~~~
