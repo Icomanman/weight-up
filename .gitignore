@@ -73,3 +73,9 @@ dmypy.json
 # OS-generated files
 .DS_Store
 Thumbs.db
+
+# Xiaomi login captcha images
+src/weight_up/xiaomi/captcha/
+
+# Personal weight history pulled from Xiaomi
+data/xiaomi_weights.json

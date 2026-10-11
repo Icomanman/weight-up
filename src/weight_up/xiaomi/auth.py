@@ -1,206 +1,222 @@
-import json
+"""Log in to Xiaomi Cloud and return credentials for signed API calls.
+
+Two entry points:
+
+- login: email and password, with the captcha and email-code challenges
+  delegated to caller-supplied providers.
+- login_with_token: re-issue credentials from a saved passToken, with no
+  password and no 2FA code.
+
+Both raise XiaomiAuthError, naming the failed step, instead of returning a
+partial result.
+"""
+
+import hashlib
 import logging
-import re
-import time
-from dataclasses import dataclass
-from typing import Callable, Optional
-from urllib.parse import parse_qs, urlparse
+from typing import Any, Callable
 
 import requests
 
+from .constants import ACCOUNT_URL, SERVICE_ID
+from .errors import XiaomiAuthError
+from .models import XiaomiAuthResult
+from .session import (
+    find_cookie,
+    form_headers,
+    generate_user_agent,
+    parse_response,
+    start_login_session,
+    text_or_none,
+)
+from .two_factor import XiaomiEmailTwoFactorAuthenticator
 
-@dataclass(frozen=True)
-class XiaomiAuthResult:
-    ssecurity: str
-    service_token: str
-    user_id: Optional[str]
-    c_user_id: Optional[str]
+CodeProvider = Callable[[], str]
+CaptchaProvider = Callable[[bytes], str]
 
 
-class XiaomiEmailTwoFactorAuthenticator:
-    """Complete Xiaomi's email-code challenge in an existing login session."""
+def login(
+    email: str,
+    password: str,
+    code_provider: CodeProvider,
+    captcha_provider: CaptchaProvider | None = None,
+    logger: logging.Logger | None = None,
+) -> XiaomiAuthResult:
+    """Log in with email and password, completing any challenge Xiaomi raises.
 
-    def __init__(
-        self,
-        session: requests.Session,
-        user_agent: str,
-        code_provider: Callable[[], str],
-        logger: Optional[logging.Logger] = None,
-    ) -> None:
-        self._session = session
-        self._user_agent = user_agent
-        self._code_provider = code_provider
-        self._logger = logger or logging.getLogger(__name__)
+    code_provider is called once, after Xiaomi has emailed the 2FA code, and
+    returns it. captcha_provider receives the captcha image bytes and returns
+    the text shown; without it a captcha ends the login. The result includes
+    a pass_token when Xiaomi sets one, so later runs can use login_with_token.
+    """
+    if not email or not password:
+        raise ValueError("email and password are required")
+    logger = logger or logging.getLogger(__name__)
+    user_agent = generate_user_agent()
+    session = start_login_session()
 
-    def authenticate(
-        self,
-        notification_url: str,
-        user_id: Optional[str] = None,
-        c_user_id: Optional[str] = None,
-    ) -> Optional[XiaomiAuthResult]:
-        headers = {
-            "User-Agent": self._user_agent,
-            "Content-Type": "application/x-www-form-urlencoded",
-        }
-        self._logger.debug("Opening Xiaomi 2FA notification URL")
-        self._session.get(notification_url, headers=headers)
+    sign = _request_login_sign(session, user_agent, email)
+    reply = _submit_credentials(session, user_agent, email, password, sign)
+    if reply.get("captchaUrl"):
+        reply = _solve_captcha(
+            session, user_agent, email, password, sign, reply, captcha_provider)
 
-        context = parse_qs(urlparse(notification_url).query).get("context", [None])[0]
-        if not context:
-            self._logger.error("Xiaomi 2FA notification URL does not contain a context")
-            return None
-
-        list_params = {"sid": "xiaomiio", "context": context, "_locale": "en_US"}
-        self._session.get(
-            "https://account.xiaomi.com/identity/list",
-            params=list_params,
-            headers=headers,
+    if reply.get("notificationUrl"):
+        return XiaomiEmailTwoFactorAuthenticator(
+            session, user_agent, code_provider, logger
+        ).authenticate(
+            reply["notificationUrl"],
+            user_id=text_or_none(reply.get("userId")),
+            c_user_id=text_or_none(reply.get("cUserId")),
         )
+    if reply.get("ssecurity") and reply.get("location"):
+        return _complete_without_two_factor(session, user_agent, reply)
+    raise XiaomiAuthError(f"Login rejected (code={reply.get('code')})")
 
-        send_params = {
-            "_dc": str(int(time.time() * 1000)),
-            "sid": "xiaomiio",
-            "context": context,
-            "mask": "0",
-            "_locale": "en_US",
-        }
-        send_data = {
-            "retry": "0",
-            "icode": "",
-            "_json": "true",
-            "ick": self._session.cookies.get("ick", ""),
-        }
-        response = self._session.post(
-            "https://account.xiaomi.com/identity/auth/sendEmailTicket",
-            params=send_params,
-            data=send_data,
-            headers=headers,
-        )
-        try:
-            send_response = response.json()
-        except ValueError:
-            send_response = {}
-        self._logger.debug("sendEmailTicket response status=%s", response.status_code)
 
-        code = self._code_provider().strip()
-        verify_params = {
-            "_flag": "8",
-            "_json": "true",
-            "sid": "xiaomiio",
-            "context": context,
-            "mask": "0",
-            "_locale": "en_US",
-        }
-        verify_data = {
-            "_flag": "8",
-            "ticket": code,
-            "trust": "false",
-            "_json": "true",
-            "ick": self._session.cookies.get("ick", ""),
-        }
-        response = self._session.post(
-            "https://account.xiaomi.com/identity/auth/verifyEmail",
-            params=verify_params,
-            data=verify_data,
-            headers=headers,
-        )
-        if response.status_code != 200:
-            self._logger.error("verifyEmail failed: status=%s", response.status_code)
-            return None
+def login_with_token(
+    user_id: str,
+    pass_token: str,
+    logger: logging.Logger | None = None,
+) -> XiaomiAuthResult:
+    """Re-issue ssecurity and serviceToken from a saved passToken.
 
-        try:
-            finish_location = response.json().get("location")
-        except ValueError:
-            finish_location = response.headers.get("Location")
-            if not finish_location and response.text:
-                match = re.search(
-                    r'https://account\.xiaomi\.com/identity/result/check\?[^"\']+',
-                    response.text,
-                )
-                if match:
-                    finish_location = match.group(0)
+    Raises XiaomiAuthError if Xiaomi rejects the token, for example because
+    it has expired; the caller then needs a full login.
+    """
+    if not user_id or not pass_token:
+        raise ValueError("user_id and pass_token are required")
+    (logger or logging.getLogger(__name__)).debug("Logging in with passToken")
+    user_agent = generate_user_agent()
+    session = requests.Session()
 
-        if not finish_location:
-            response = self._session.get(
-                "https://account.xiaomi.com/identity/result/check",
-                params={"sid": "xiaomiio", "context": context, "_locale": "en_US"},
-                headers=headers,
-                allow_redirects=False,
-            )
-            if response.status_code in (301, 302):
-                finish_location = response.headers.get("Location")
+    response = session.get(
+        f"{ACCOUNT_URL}/pass/serviceLogin",
+        params={"_json": "true", "sid": SERVICE_ID},
+        headers={"User-Agent": user_agent},
+        cookies={"userId": user_id, "passToken": pass_token},
+    )
+    reply = _read_reply(response, "serviceLogin")
+    if reply.get("result") != "ok":
+        raise XiaomiAuthError(
+            f"passToken rejected (result={reply.get('result')})")
+    if not (reply.get("ssecurity") and reply.get("location")):
+        raise XiaomiAuthError("serviceLogin gave no ssecurity or location")
 
-        if not finish_location:
-            self._logger.error("Unable to determine Xiaomi 2FA finish location")
-            return None
+    reply.setdefault("userId", user_id)
+    reply.setdefault("passToken", pass_token)
+    return _complete_without_two_factor(session, user_agent, reply)
 
-        if "identity/result/check" in finish_location:
-            response = self._session.get(
-                finish_location,
-                headers=headers,
-                allow_redirects=False,
-            )
-            end_url = response.headers.get("Location")
-        else:
-            end_url = finish_location
-        if not end_url:
-            self._logger.error("Could not find Xiaomi Auth2/end URL")
-            return None
 
-        response = self._session.get(end_url, headers=headers, allow_redirects=False)
-        if response.status_code == 200 and "Xiaomi Account - Tips" in response.text:
-            response = self._session.get(end_url, headers=headers, allow_redirects=False)
+def _read_reply(response: requests.Response, step: str) -> dict[str, Any]:
+    if response.status_code != 200:
+        raise XiaomiAuthError(f"{step} failed: status={response.status_code}")
+    try:
+        return parse_response(response.text)
+    except ValueError as error:
+        raise XiaomiAuthError(f"{step} returned an unreadable reply") from error
 
-        ssecurity = None
-        extension_pragma = response.headers.get("extension-pragma")
-        if extension_pragma:
-            try:
-                ssecurity = json.loads(extension_pragma).get("ssecurity")
-            except (TypeError, ValueError):
-                self._logger.debug("Unable to parse Xiaomi extension-pragma header")
-        if not ssecurity:
-            self._logger.error("Xiaomi Auth2/end did not provide ssecurity")
-            return None
 
-        sts_url = response.headers.get("Location")
-        if not sts_url and response.text:
-            start = response.text.find("https://sts.api.io.mi.com/sts")
-            if start != -1:
-                end = response.text.find('"', start)
-                sts_url = response.text[start:end if end != -1 else start + 300]
-        if not sts_url:
-            self._logger.error("Xiaomi Auth2/end did not provide an STS redirect")
-            return None
+def _request_login_sign(
+    session: requests.Session, user_agent: str, email: str
+) -> str:
+    response = session.get(
+        f"{ACCOUNT_URL}/pass/serviceLogin?sid={SERVICE_ID}&_json=true",
+        headers={"User-Agent": user_agent},
+        cookies={"userId": email},
+    )
+    sign = _read_reply(response, "serviceLogin").get("_sign")
+    if not sign:
+        raise XiaomiAuthError("serviceLogin did not return a _sign; check the email")
+    return sign
 
-        response = self._session.get(sts_url, headers=headers, allow_redirects=True)
-        if response.status_code != 200:
-            self._logger.error("Xiaomi STS did not complete: status=%s", response.status_code)
-            return None
 
-        service_token = self._session.cookies.get(
-            "serviceToken", domain=".sts.api.io.mi.com"
-        )
-        if not service_token:
-            self._logger.error("Xiaomi STS did not set a service token")
-            return None
+def _submit_credentials(
+    session: requests.Session,
+    user_agent: str,
+    email: str,
+    password: str,
+    sign: str,
+    captcha_code: str | None = None,
+) -> dict[str, Any]:
+    # Xiaomi expects an upper-case MD5 of the password, not the password itself.
+    fields = {
+        "sid": SERVICE_ID,
+        "hash": hashlib.md5(password.encode()).hexdigest().upper(),
+        "callback": "https://sts.api.io.mi.com/sts",
+        "qs": "%3Fsid%3Dxiaomiio%26_json%3Dtrue",
+        "user": email,
+        "_sign": sign,
+        "_json": "true",
+    }
+    if captcha_code:
+        fields["captCode"] = captcha_code
+    response = session.post(
+        f"{ACCOUNT_URL}/pass/serviceLoginAuth2",
+        params=fields,
+        headers=form_headers(user_agent),
+        allow_redirects=False,
+    )
+    return _read_reply(response, "serviceLoginAuth2")
 
-        for domain in (".api.io.mi.com", ".io.mi.com", ".mi.com"):
-            self._session.cookies.set("serviceToken", service_token, domain=domain)
-            self._session.cookies.set("yetAnotherServiceToken", service_token, domain=domain)
 
-        resolved_user_id = (
-            user_id
-            or self._session.cookies.get("userId", domain=".xiaomi.com")
-            or self._session.cookies.get("userId", domain=".sts.api.io.mi.com")
-        )
-        resolved_c_user_id = (
-            c_user_id
-            or self._session.cookies.get("cUserId", domain=".xiaomi.com")
-            or self._session.cookies.get("cUserId", domain=".sts.api.io.mi.com")
-        )
-        return XiaomiAuthResult(
-            ssecurity=ssecurity,
-            service_token=service_token,
-            user_id=resolved_user_id,
-            c_user_id=resolved_c_user_id,
-        )
+def _fetch_captcha_image(
+    session: requests.Session, user_agent: str, captcha_url: str
+) -> bytes:
+    # The captcha is bound to this session, so it must be fetched with it.
+    if captcha_url.startswith("/"):
+        captcha_url = ACCOUNT_URL + captcha_url
+    response = session.get(captcha_url, headers={"User-Agent": user_agent})
+    if response.status_code != 200:
+        raise XiaomiAuthError("Unable to download the captcha image")
+    return response.content
+
+
+def _solve_captcha(
+    session: requests.Session,
+    user_agent: str,
+    email: str,
+    password: str,
+    sign: str,
+    reply: dict[str, Any],
+    captcha_provider: CaptchaProvider | None,
+) -> dict[str, Any]:
+    """Resubmit the credentials once with the captcha text."""
+    if captcha_provider is None:
+        raise XiaomiAuthError(
+            "Xiaomi requires a captcha and no solver was given")
+    image = _fetch_captcha_image(session, user_agent, reply["captchaUrl"])
+    captcha_code = captcha_provider(image).strip()
+    if not captcha_code:
+        raise XiaomiAuthError("No captcha text provided")
+
+    retry_reply = _submit_credentials(
+        session, user_agent, email, password, sign, captcha_code)
+    if retry_reply.get("captchaUrl") or retry_reply.get("code") == 87001:
+        raise XiaomiAuthError("Captcha rejected; run again for a new one")
+    return retry_reply
+
+
+def _complete_without_two_factor(
+    session: requests.Session,
+    user_agent: str,
+    reply: dict[str, Any],
+) -> XiaomiAuthResult:
+    """Fetch the service token from the reply's location URL."""
+    response = session.get(reply["location"], headers={"User-Agent": user_agent})
+    service_token = (
+        response.cookies.get("serviceToken")
+        or find_cookie(session, "serviceToken")
+    )
+    if response.status_code != 200 or not service_token:
+        raise XiaomiAuthError(
+            "Could not fetch a service token from the location URL")
+    return XiaomiAuthResult(
+        ssecurity=str(reply["ssecurity"]),
+        service_token=service_token,
+        user_id=text_or_none(reply.get("userId")),
+        c_user_id=text_or_none(reply.get("cUserId")),
+        pass_token=(
+            text_or_none(reply.get("passToken"))
+            or find_cookie(session, "passToken")
+        ),
+    )

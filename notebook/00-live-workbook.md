@@ -111,6 +111,12 @@ Paths explored:
 * The Xiaomi section makes me go in circles, haven't gotten past auth methods; this prevented me from building proper momentum on the whole project.
 * Pivoted to first attempt on FatSecret API. I got a sample record for the month to date (in json). Good progress. Extracted it via Postman. Started working with Python implementation.
 
+11 October 2026
+
+* Vibed a 2FA auth flow with Xiaomi cloud successfully.
+* Vibed (Reverse-engineered) the request-response cycle from the (C#/MAUI) mobile app to Xiaomi cloud.
+* Ask Sonnet 5.5 to refactor; will check it next.
+
 ~~~
 
 ### Questions

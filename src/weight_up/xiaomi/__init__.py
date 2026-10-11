@@ -1,10 +1,17 @@
-from .auth import APP_MI_FITNESS, APP_XIAOMI_HOME
-from .client import Client, XiaomiWeight, mifitness_url
+"""Xiaomi cloud access: login, signed API calls and scale weight history."""
+
+from .auth import login, login_with_token
+from .client import XiaomiScaleClient
+from .errors import XiaomiApiError, XiaomiAuthError, XiaomiError
+from .models import XiaomiAuthResult, XiaomiWeight
 
 __all__ = [
-    "APP_MI_FITNESS",
-    "APP_XIAOMI_HOME",
-    "Client",
+    "XiaomiApiError",
+    "XiaomiAuthError",
+    "XiaomiAuthResult",
+    "XiaomiError",
+    "XiaomiScaleClient",
     "XiaomiWeight",
-    "mifitness_url",
+    "login",
+    "login_with_token",
 ]

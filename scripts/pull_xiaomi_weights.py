@@ -6,18 +6,25 @@ from pathlib import Path
 
 from dotenv import dotenv_values
 
-from weight_up.xiaomi.client import Client
+from weight_up.xiaomi import XiaomiError, XiaomiScaleClient, login_with_token
+from weight_up.xiaomi.constants import SCALE_REGIONS
+
+ENV_PATH = Path(__file__).resolve().parents[1] / ".env"
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Fetch Xiaomi Mi Fitness weight history as JSON."
+        description="Fetch Xiaomi scale weight history as JSON."
     )
     parser.add_argument(
         "--region",
-        choices=("cn", "de", "i2", "ru", "sg", "us"),
+        choices=SCALE_REGIONS,
         default="sg",
         help="Xiaomi account region (default: sg)",
+    )
+    parser.add_argument(
+        "--model",
+        help="Scale model, e.g. yunmai.scales.ms104 (default: XIAOMI_SCALE_MODEL in .env)",
     )
     parser.add_argument(
         "--output",
@@ -31,21 +38,22 @@ def main() -> None:
         parser.error(
             f"output already exists; refusing to overwrite: {args.output}")
 
-    env_path = Path(__file__).resolve().parents[1] / ".env"
-    credentials = dotenv_values(env_path)
-    username = credentials.get("xiaomi_user")
-    password = credentials.get("xiaomi_password")
-    if not username or not password:
+    settings = dotenv_values(ENV_PATH)
+    user_id = settings.get("XIAOMI_USER_ID")
+    pass_token = settings.get("XIAOMI_PASS_TOKEN")
+    model = args.model or settings.get("XIAOMI_SCALE_MODEL")
+    if not user_id or not pass_token or not model:
         parser.error(
-            "set xiaomi_user and xiaomi_password in the repository .env file"
+            "set XIAOMI_USER_ID and XIAOMI_PASS_TOKEN in the repository .env "
+            "file, and XIAOMI_SCALE_MODEL there or pass --model; obtain the "
+            "token with: python -m weight_up.xiaomi EMAIL --show-pass-token"
         )
 
-    client = Client()
     try:
-        client.login(username, password)
-        weights = client.get_filter_weights(args.region)
-    finally:
-        client.close()
+        auth_result = login_with_token(user_id, pass_token)
+        weights = XiaomiScaleClient(auth_result, args.region, model).get_weights()
+    except XiaomiError as error:
+        parser.exit(1, f"Xiaomi request failed: {error}\n")
 
     records = []
     for weight in weights:
@@ -54,8 +62,9 @@ def main() -> None:
         records.append(record)
 
     document = {
-        "source": "xiaomi_mi_fitness",
+        "source": "xiaomi_home_scale",
         "region": args.region,
+        "model": model,
         "retrieved_at": datetime.now(timezone.utc).isoformat(),
         "records": records,
     }
