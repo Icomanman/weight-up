@@ -9,10 +9,15 @@ from urllib.parse import parse_qs, urlparse
 
 import requests
 
-from .constants import ACCOUNT_URL, SERVICE_ID, STS_URL_PREFIX
-from .errors import XiaomiAuthError
-from .models import XiaomiAuthResult
-from .session import find_cookie, form_headers, text_or_none
+from .models import XiaomiAuthError, XiaomiAuthResult
+from .session import (
+    ACCOUNT_URL,
+    SERVICE_ID,
+    STS_URL_PREFIX,
+    find_cookie,
+    form_headers,
+    text_or_none,
+)
 
 _RESULT_CHECK_PATTERN = re.compile(
     r'https://account\.xiaomi\.com/identity/result/check\?[^"\']+')

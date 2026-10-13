@@ -2,13 +2,13 @@ import base64
 
 import pytest
 
-from weight_up.xiaomi import (
-    XiaomiApiError,
-    XiaomiAuthResult,
-    XiaomiScaleClient,
+from weight_up.xiaomi import XiaomiApiError, XiaomiAuthResult, fetch_weights
+from weight_up.xiaomi.api import (
+    api_host,
+    call_encrypted_api,
+    fetch_scale_records,
+    verify_tokens,
 )
-from weight_up.xiaomi.cloud_api import api_host, call_encrypted_api, verify_tokens
-from weight_up.xiaomi.scale import fetch_scale_records
 from .xiaomi_fakes import EncryptedApi
 
 SSECURITY = base64.b64encode(bytes(range(16))).decode()
@@ -128,20 +128,23 @@ def test_regions_without_the_scale_endpoint_fail_early(region):
                             session=EncryptedApi(SSECURITY))
 
 
-def test_client_validates_before_any_request():
+def test_missing_model_or_user_id_fails_before_any_request():
     no_user = XiaomiAuthResult(SSECURITY, "svc", None, None)
+    api = EncryptedApi(SSECURITY)
 
     with pytest.raises(ValueError, match="model"):
-        XiaomiScaleClient(AUTH, "sg", "")
+        fetch_weights(AUTH, "sg", "", session=api)
     with pytest.raises(ValueError, match="user_id"):
-        XiaomiScaleClient(no_user, "sg", MODEL)
+        fetch_weights(no_user, "sg", MODEL, session=api)
+
+    assert api.requests == []
 
 
-def test_client_returns_parsed_weights():
+def test_fetch_weights_returns_parsed_weights():
     record = {"fromSource": 1, "createTime": 1_700_000_000_000,
               "data": '{"weight": 70.5, "user": {"name": "me"}}'}
     api = EncryptedApi(SSECURITY, pages=[[record]])
 
-    [weight] = XiaomiScaleClient(AUTH, "sg", MODEL, session=api).get_weights()
+    [weight] = fetch_weights(AUTH, "sg", MODEL, session=api)
 
     assert (weight.weight, weight.user) == (70.5, "me")

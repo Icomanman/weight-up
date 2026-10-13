@@ -4,8 +4,7 @@ import json
 from datetime import datetime, timezone
 from typing import Any, Iterable
 
-from .errors import XiaomiApiError
-from .models import XiaomiWeight
+from .models import XiaomiApiError, XiaomiWeight
 
 # fromSource values that carry weight data; others are ignored.
 _SOURCES_WITH_USER_BLOCK = (1, 2)

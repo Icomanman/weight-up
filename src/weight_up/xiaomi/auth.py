@@ -17,10 +17,10 @@ from typing import Any, Callable
 
 import requests
 
-from .constants import ACCOUNT_URL, SERVICE_ID
-from .errors import XiaomiAuthError
-from .models import XiaomiAuthResult
+from .models import XiaomiAuthError, XiaomiAuthResult
 from .session import (
+    ACCOUNT_URL,
+    SERVICE_ID,
     find_cookie,
     form_headers,
     generate_user_agent,

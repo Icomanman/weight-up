@@ -1,7 +1,23 @@
-"""Immutable data shared across the Xiaomi cloud modules."""
+"""Data types and exceptions shared across the Xiaomi package.
+
+This is the package's public vocabulary: what a login returns, what a weigh-in
+looks like, and how failures are named.
+"""
 
 from dataclasses import dataclass, field
 from datetime import datetime
+
+
+class XiaomiError(Exception):
+    """Base class for every Xiaomi cloud failure."""
+
+
+class XiaomiAuthError(XiaomiError):
+    """Login failed; the message names the step and what Xiaomi returned."""
+
+
+class XiaomiApiError(XiaomiError):
+    """A signed API call failed or its reply could not be decrypted."""
 
 
 @dataclass(frozen=True)

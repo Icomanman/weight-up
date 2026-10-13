@@ -1,4 +1,8 @@
-"""Small HTTP helpers shared by the Xiaomi login modules."""
+"""Plumbing shared by the login modules, which talk to Xiaomi's account host.
+
+Holds the account endpoints, the Mi Home user agent, session setup, and the
+small parsing helpers the login flow needs. It makes no login decisions.
+"""
 
 import json
 import random
@@ -6,6 +10,12 @@ import string
 from typing import Any
 
 import requests
+
+ACCOUNT_URL = "https://account.xiaomi.com"
+STS_URL_PREFIX = "https://sts.api.io.mi.com/sts"
+
+# The Mi Home service identifier. The scale endpoint accepts tokens issued for it.
+SERVICE_ID = "xiaomiio"
 
 
 def generate_user_agent() -> str:

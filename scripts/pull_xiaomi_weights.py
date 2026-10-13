@@ -6,8 +6,8 @@ from pathlib import Path
 
 from dotenv import dotenv_values
 
-from weight_up.xiaomi import XiaomiError, XiaomiScaleClient, login_with_token
-from weight_up.xiaomi.constants import SCALE_REGIONS
+from weight_up.xiaomi import XiaomiError, fetch_weights, login_with_token
+from weight_up.xiaomi.api import SCALE_REGIONS
 
 ENV_PATH = Path(__file__).resolve().parents[1] / ".env"
 
@@ -51,7 +51,7 @@ def main() -> None:
 
     try:
         auth_result = login_with_token(user_id, pass_token)
-        weights = XiaomiScaleClient(auth_result, args.region, model).get_weights()
+        weights = fetch_weights(auth_result, args.region, model)
     except XiaomiError as error:
         parser.exit(1, f"Xiaomi request failed: {error}\n")
 

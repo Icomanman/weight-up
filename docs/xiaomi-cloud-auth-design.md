@@ -37,7 +37,7 @@ The goal was to read personal weigh-in history from Xiaomi's cloud. Logging in t
 
 ![Layer diagram: application, adapter and domain layers, with every dependency pointing down](diagrams/xiaomi-architecture-layers.svg)
 
-*Figure 1. Purple arrows leave the application layer, blue arrows the adapter layer, green arrows the domain layer. The grey arrow means every adapter may import the domain layer.*
+*Figure 1. Purple arrows leave the application layer, blue arrows the adapter layer, green arrows the domain layer. The grey arrow means adapters may import `models.py`.*
 
 **Rule:** an arrow never points up a layer. The domain layer must not import `requests`. This was checked mechanically (an AST walk over the package: no upward imports, no cycles, none of the domain modules import `requests`).
 
@@ -47,18 +47,25 @@ All under [`src/weight_up/xiaomi/`](../src/weight_up/xiaomi/).
 
 | Module | Responsibility | Key public names |
 |---|---|---|
-| [constants.py](../src/weight_up/xiaomi/constants.py) | Endpoints, the service identifier, region tuples | `ACCOUNT_URL`, `SERVICE_ID`, `SCALE_REGIONS`, `API_REGIONS` |
-| [errors.py](../src/weight_up/xiaomi/errors.py) | Exception hierarchy | `XiaomiError` > `XiaomiAuthError`, `XiaomiApiError` |
-| [models.py](../src/weight_up/xiaomi/models.py) | Frozen data | `XiaomiAuthResult`, `XiaomiWeight` |
+| [models.py](../src/weight_up/xiaomi/models.py) | The package's public vocabulary: frozen data and the exception hierarchy | `XiaomiAuthResult`, `XiaomiWeight`, `XiaomiError` > `XiaomiAuthError`, `XiaomiApiError` |
 | [signing.py](../src/weight_up/xiaomi/signing.py) | Nonce, key derivation, RC4, request signature, response decryption | `build_nonce`, `derive_signed_nonce`, `rc4_crypt`, `build_encrypted_params`, `decrypt_response` |
 | [weights.py](../src/weight_up/xiaomi/weights.py) | Raw scale records to `XiaomiWeight` | `parse_scale_records` |
-| [session.py](../src/weight_up/xiaomi/session.py) | User agent, device cookies, guarded-JSON parsing, cookie lookup | `start_login_session`, `parse_response`, `find_cookie` |
+| [session.py](../src/weight_up/xiaomi/session.py) | Plumbing for the account host: endpoints, user agent, device cookies, guarded-JSON parsing, cookie lookup | `ACCOUNT_URL`, `SERVICE_ID`, `start_login_session`, `parse_response`, `find_cookie` |
 | [two_factor.py](../src/weight_up/xiaomi/two_factor.py) | The email-code flow as small steps | `XiaomiEmailTwoFactorAuthenticator` |
 | [auth.py](../src/weight_up/xiaomi/auth.py) | Login orchestration: sign, credentials, captcha, 2FA, token login | `login`, `login_with_token` |
-| [cloud_api.py](../src/weight_up/xiaomi/cloud_api.py) | One signed, encrypted POST; token verification | `call_encrypted_api`, `verify_tokens`, `api_host` |
-| [scale.py](../src/weight_up/xiaomi/scale.py) | Scale endpoint and paging | `fetch_scale_records`, `validate_scale_request` |
-| [client.py](../src/weight_up/xiaomi/client.py) | Thin facade: fetch + parse for one model | `XiaomiScaleClient` |
-| [cli.py](../src/weight_up/xiaomi/cli.py) | Presentation only | `main` |
+| [api.py](../src/weight_up/xiaomi/api.py) | Everything that talks to the regional API host: one signed, encrypted POST, a credential check, paged scale history. Owns the region lists | `call_encrypted_api`, `verify_tokens`, `fetch_scale_records`, `fetch_weights`, `SCALE_REGIONS`, `API_REGIONS` |
+| [cli.py](../src/weight_up/xiaomi/cli.py) | Presentation only. `__main__.py` is the three-line entry point for `python -m` | `main` |
+
+Each module has one reason to change:
+
+| Reason to change | Module |
+|---|---|
+| What the package returns, or how it fails | `models` |
+| Xiaomi's request cryptography | `signing` |
+| The format of a scale record | `weights` |
+| The account-host login protocol | `session`, `two_factor`, `auth` |
+| The API-host endpoints | `api` |
+| What the user sees and is asked | `cli` |
 
 ### 2.3 Contracts
 
@@ -67,9 +74,9 @@ login(email, password, code_provider: Callable[[], str],
       captcha_provider: Callable[[bytes], str] | None = None, logger=None) -> XiaomiAuthResult
 login_with_token(user_id, pass_token, logger=None)                         -> XiaomiAuthResult
 verify_tokens(auth_result, region, session=None)                           -> None   # raises XiaomiApiError
-fetch_scale_records(auth_result, region, model, max_pages=500, session=None) -> list[dict]
+fetch_weights(auth_result, region, model, session=None)                    -> list[XiaomiWeight]
+fetch_scale_records(auth_result, region, model, max_pages=500, session=None) -> list[dict]   # raw
 parse_scale_records(records)                                               -> list[XiaomiWeight]
-XiaomiScaleClient(auth_result, region, model, session=None).get_weights()  -> list[XiaomiWeight]
 ```
 
 `XiaomiAuthResult` carries `ssecurity`, `service_token`, `user_id`, `c_user_id`, `pass_token`. Secret fields are excluded from `repr`, so logging the object cannot leak them.
@@ -268,6 +275,10 @@ Open: `api.account.xiaomi.com`, `sg.core.api.io.mi.com` and `sg.home.mi.com` wer
 | D12 | Kept the name `auth.py` for login orchestration | Existing mental model and import path | Renaming to `login.py` |
 | D13 | Did not adopt the reference extractor wholesale | It parses command-line arguments at import time, holds global state and mixes prompting with protocol | Copying it and trimming |
 | D14 | Rejected: browser automation, MITM capture, IMAP now | Automation is heavy and brittle; capture failed (3.9); IMAP is possible later through `code_provider` | |
+| D15 | Consolidated from 12 modules to 8 (14 files to 10) after review. `cloud_api`, `scale` and `client` became `api.py` | Each was imported by one or two others and the layer diagram had about 15 arrows. They share one responsibility, talking to the API host, and one reason to change | Keeping three files; collapsing everything into one (the 779-line version was harder to read and test) |
+| D16 | Removed the `XiaomiScaleClient` class; `fetch_weights(auth, region, model)` replaces it | The class wrapped two calls and had one caller. Inputs are now validated at call time, still before any request | Keeping the class for construct-time validation |
+| D17 | Exceptions moved into `models.py`; endpoint constants moved into the module that uses them (`session.py` for the account host, `api.py` for regions) | A 13-line file each, imported by most modules, with no behaviour of its own | Absorbing the helpers into `auth.py`: `two_factor.py` needs them and `auth.py` imports `two_factor.py`, which would be a cycle |
+| D18 | Kept `signing`, `weights`, `two_factor` and `cli` as separate modules despite the pressure to merge | `signing` and `weights` are pure and tested against an oracle; `two_factor` is a separate protocol (the identity service) with about twelve steps; `cli` is the only code that prompts or prints. Merging `two_factor` into `auth` gives a 470-line module with two protocols | A single `login.py` |
 
 ### Assumptions
 
@@ -305,15 +316,15 @@ Tests live in [tests/xiaomi/](../tests/xiaomi/), a package, so modules import th
 | `test_xiaomi_weights.py` | each source type, defaults, malformed record index, immutability |
 | `test_xiaomi_two_factor.py` | success, ticket failure stops before the prompt, each fallback, Tips page, missing `ssecurity`, STS without cookie |
 | `test_xiaomi_auth.py` | hash and `_sign`, captcha success/rejection/blank/no-solver, rejected credentials, unreadable reply, token login success and expiry |
-| `test_xiaomi_cloud_api.py` | request shape, region validation, error mapping, paging cursor, stalled cursor, page limit, client |
+| `test_xiaomi_api.py` | request shape, region validation, error mapping, paging cursor, stalled cursor, page limit, `fetch_weights` |
 | `test_xiaomi_cli.py` | argument rules, secrets never printed, captcha folder created on demand |
 
 Techniques worth repeating:
 
 - **Fakes, not patched `requests`.** A `FakeSession` answers from a route table; an `EncryptedApi` fake actually decrypts the request and encrypts the reply, so signing and transport are tested together.
 - **Independent oracle.** The signing test re-implements the C# string-building by hand.
-- **Characterisation before refactoring.** Old and new parsers were run on the same inputs.
-- **Mutation spot-checks.** Three deliberate bugs (lower-case hash, wrong paging cursor, fields in the query string) were each caught. If you do this, clear `__pycache__` between runs: a same-size edit in the same second left a stale bytecode file that briefly made a healthy suite look broken.
+- **Characterisation before refactoring.** Old and new parsers were run on the same inputs. The D15 consolidation reused the existing tests, changing only imports and the two tests that exercised the removed client class.
+- **Mutation spot-checks.** Four deliberate bugs (lower-case hash, wrong paging cursor, fields in the query string, unchecked region) were each caught, including after the D15 consolidation. If you do this, clear `__pycache__` between runs: a same-size edit in the same second left a stale bytecode file that briefly made a healthy suite look broken.
 
 ### 6.3 Running it
 
@@ -336,8 +347,8 @@ python scripts/pull_xiaomi_weights.py --region sg
 |---|---|
 | Read the email code automatically | Pass an IMAP-reading callable as `code_provider`; no protocol change |
 | Expire handling | Catch `XiaomiAuthError` from `login_with_token`, fall back to `login`, store the new `passToken` |
-| Another endpoint | Call `call_encrypted_api` with a new path and body; keep parsing in a pure module |
-| China scale data | Add `/eco/scale/getData` (different body shape) to `scale.py` |
+| Another endpoint | Call `call_encrypted_api` from `api.py` with a new path and body; keep parsing in a pure module |
+| China scale data | Add `/eco/scale/getData` (different body shape) to `api.py` |
 | Device listing, to find the model | `v2/homeroom/gethome` and `v2/home/home_device_list` appear in the reference extractor |
 
 ---
@@ -362,6 +373,7 @@ python scripts/pull_xiaomi_weights.py --region sg
 5. Try `trust=true` in `verifyEmail` as a way to reduce future codes.
 6. Establish the token's lifetime by observation.
 7. Decide whether to keep `tmp/token_extractor.py`; it is a reference only and nothing imports it.
+8. Prune the inherited 2FA fallbacks (the body regex, the `result/check` fallback, the Tips-page repeat, the STS-from-body scan) and the unobserved no-challenge login branch. Do it with evidence: log which branch fires during a live run, then delete those that never did. Deleting them blind risks breaking a path the live service uses.
 
 ---
 

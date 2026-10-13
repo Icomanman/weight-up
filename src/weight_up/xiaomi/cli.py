@@ -11,12 +11,9 @@ import os
 import time
 from pathlib import Path
 
+from .api import API_REGIONS, api_host, fetch_scale_records, verify_tokens
 from .auth import login, login_with_token
-from .cloud_api import api_host, verify_tokens
-from .constants import API_REGIONS
-from .errors import XiaomiError
-from .models import XiaomiAuthResult
-from .scale import fetch_scale_records
+from .models import XiaomiAuthResult, XiaomiError
 from .weights import parse_scale_records
 
 CAPTCHA_DIR = Path(__file__).resolve().parent / "captcha"
