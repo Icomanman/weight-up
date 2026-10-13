@@ -41,9 +41,7 @@ _APP_COOKIES = {
 }
 
 
-# --- Signed transport ---------------------------------------------------------
-
-
+# Signed transport
 def api_host(region: str) -> str:
     """Return the API hostname for region, rejecting unknown regions.
 
@@ -72,7 +70,11 @@ def call_encrypted_api(
     host = api_host(region)
     nonce = build_nonce(os.urandom(8), time.time())
     form = build_encrypted_params(
-        path, auth_result.ssecurity, nonce, {"data": data})
+        path,
+        auth_result.ssecurity,
+        nonce,
+        {"data": data}
+    )
     response = (session or requests).post(
         f"https://{host}{path}",
         headers=_request_headers(extra_headers),
@@ -133,9 +135,7 @@ def _request_cookies(auth_result: XiaomiAuthResult) -> dict[str, str]:
     }
 
 
-# --- Scale history ------------------------------------------------------------
-
-
+# Scale history
 def fetch_weights(
     auth_result: XiaomiAuthResult,
     region: str,
@@ -165,7 +165,13 @@ def fetch_scale_records(
     records: list[dict[str, Any]] = []
     begin_time = int(time.time() * 1000)
     for _ in range(max_pages):
-        page = _fetch_scale_page(auth_result, region, model, begin_time, session)
+        page = _fetch_scale_page(
+            auth_result,
+            region,
+            model,
+            begin_time,
+            session
+        )
         records.extend(page)
         next_begin_time = _next_begin_time(page)
         if next_begin_time is None:
@@ -174,7 +180,8 @@ def fetch_scale_records(
             raise XiaomiApiError("Scale paging did not advance")
         begin_time = next_begin_time
     raise XiaomiApiError(
-        f"Stopped after {max_pages} pages; more scale data may remain")
+        f"Stopped after {max_pages} pages; more scale data may remain"
+    )
 
 
 def _validate_scale_request(

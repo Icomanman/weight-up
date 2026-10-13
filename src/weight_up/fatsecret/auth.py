@@ -92,8 +92,22 @@ def auth() -> dict[str, str]:
     return access_token
 
 
+def create_authenticated_session() -> OAuth1Session:
+    """Create an OAuth session using the saved FatSecret access credentials."""
+    return OAuth1Session(
+        client_key=_required_environment_variable("CONSUMER_KEY"),
+        client_secret=_required_environment_variable("CONSUMER_SECRET"),
+        resource_owner_key=_required_environment_variable("FAT_ACCESS_TOKEN"),
+        resource_owner_secret=_required_environment_variable(
+            "FAT_ACCESS_TOKEN_SECRET"
+        ),
+        signature_method="HMAC-SHA1",
+        signature_type="QUERY",
+    )
+
+
 if __name__ == "__main__":
     print(auth())
 
 
-__all__ = ["auth"]
+__all__ = ["auth", "create_authenticated_session"]
