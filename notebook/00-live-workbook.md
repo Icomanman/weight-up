@@ -139,6 +139,12 @@ On Xiaomi:
 
 3. Are requests signed?
 
+17 October 2026
+
+Samsung records (csv) apprears to be unreliable. I decided to pick step and workout records only. But it turns out, there are less step records than workout days. What is more surprising is that there are no step records on some of exercise days.
+
+I need to investigate the data source (watch/mobile app export).
+
 ~~~
 
 ### Required Knowledge
@@ -181,6 +187,9 @@ Build:
 
 The bulk of my work from hitherto are mostly about exploring possible data acquisition from the 3 different sources. The FatSecret slice is where I started (auth) and now I successfully proven that I can pull my data from their API. I am now doing the Python implementation to pull and process the rest.
 
+17 October 2026
+
+Vibed a routine data extraction process for the Samsung records (csv).
 
 ~~~
 
