@@ -149,13 +149,13 @@ I need to investigate the data source (watch/mobile app export).
 
 ### Required Knowledge
 
-- [ ] I can describe the path from source through extraction and storage to data ready for analysis.
-- [ ] I can investigate a source interface, its data contract, authentication, permissions, and access limits.
+- [x] I can describe the path from source through extraction and storage to data ready for analysis.
+- [x] I can investigate a source interface, its data contract, authentication, permissions, and access limits.
 - [ ] I can distinguish full, incremental, and event-based collection, and choose an approach that fits the source.
 - [ ] I can parse source formats while preserving raw values, timestamps, and source provenance needed for traceability.
 - [ ] I can make collection repeatable through idempotency, retry, and recovery decisions appropriate to the source.
-- [ ] I can detect and explain collection gaps, stale data, and partial failures.
-- [ ] I can use representative source examples to check extraction and transformation behaviour.
+- [x] I can detect and explain collection gaps, stale data, and partial failures.
+- [x] I can use representative source examples to check extraction and transformation behaviour.
 
 ### Focused Reading
 
@@ -212,6 +212,15 @@ Answer:
 
 7. How are credentials and personal data protected, and what would it take to add another source?
 ~~~
+
+
+> 1. I only data source I jumped in deeper are the Samsung watch records (manually exported) - not much here; and the FatSecret API. FatSecret has good documentation for the dev API; access is via REST endpoints with OAuth1 credentials. Xiaomi is a different story. It's kind of a bootleg version. I needed to use a third-party library that someone else built. It is an unofficial API. The idea is we are mimicking the API call from the mobile app to Xiaomi servers. I did not spend much time on this despite I wanted to. I want to focus on the actual data analysis later on. But I reckon this is also a good exercise for reverse-engineering network calls - but this is for another day.
+
+> 2. I don't have shared data service. This was part of my assumption from the beginning - that I can write a common data service based on the assumption that there are available offcial APIs for each of the data source. Turned out that only FatSecret has one. Everything is source-specific; I group them down on each folder. I reckon it's not worth focusing on the abstraction. This is more on software engineering skills anyway - I would do it given different circumstances.
+
+> 3. I haven't done any normalisation yet; perhaps I'll push this to Module 3 prior to analyses. However, I designed the data models for each of the sources; mostly thin layers of 3 to 5 fields. There's not much traceability needed unless I discover specific requirements downsteam. For now, the data models are assumed to be sufficient.
+
+> 4. I have no QA/QC in place nor any request retry handling. 
 
 ### Reflection
 
