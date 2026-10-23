@@ -1,243 +1,285 @@
 # Applied Research Guide
 
-> Turn a practical decision into a question that can be investigated with evidence.
+> Explore how an established idea appears in everyday data—and what imperfect measurements let us conclude.
 
-## Purpose
+## Working Theme
 
-This guide is for using the live project to learn applied research skills. The aim is not to prove a familiar general principle or to make a personal dataset represent everyone. The aim is to investigate a real uncertainty, make a better-informed decision, and explain what the evidence does and does not support.
+Energy balance is established knowledge: changes in stored body energy reflect the balance between energy intake and energy expenditure. The practical challenge in this project is not to rediscover that principle. It is to examine how it appears, or fails to appear clearly, when a person tries to observe it through ordinary tracking tools:
 
-The project can combine two kinds of evidence:
+- a scale that records body weight;
+- a food log that records estimated intake from entered items;
+- a smartwatch that estimates activity or energy expenditure.
 
-1. **A personal case:** what the available data shows for this person, these sources, and this period.
-2. **Existing research:** what studies suggest about measurement quality, tracking practices, and other populations or devices.
+These instruments do not directly measure the full energy balance. Their values have different meanings, error sources, and gaps. Body weight also changes in the short term for reasons that do not map neatly onto changes in body fat. The project is about the **distance between a useful model and the imperfect measurements available in everyday life**.
 
-Together, these can support careful practical guidance. The personal case alone cannot establish what will work for an average person.
+## A Proposal to Start From
 
-## A Working Example
+### Working title
 
-The broad idea is that consistent, repeatable tracking may be more useful for personal decisions than pursuing exact numbers. That idea needs conditions: the relevant metric, the decision, and what “useful” means.
+**Energy Balance in Everyday Data: What My Scale, Food Log, and Smartwatch Can—and Cannot—Show**
 
-### Practical aim
+### Practical problem
 
-Understand which of the project's weight, food-log, and smartwatch measures provide stable, useful information for week-to-week personal fat-loss tracking.
+People encounter calorie and weight numbers in apps and devices, but those numbers can look more exact than the underlying measurements justify. How can someone interpret ordinary tracking data without either dismissing useful information or over-trusting estimates?
 
-### Provisional research question
+### Aim
 
-> Which signals in my weight, food-log, and smartwatch data are sufficiently stable and informative to support week-to-week decisions about my personal tracking?
+To examine how the energy-balance model can be interpreted using my real-world weight, food-log, and smartwatch records, and how source limitations, missing data, and measurement variability affect the conclusions.
 
-This is a starting question, not a commitment to a particular result. It can be narrowed after reviewing the sources and the relevant literature.
+### Primary research question
 
-### Provisional hypothesis
+> How does the established energy-balance model appear in my real-world weight, food-log, and smartwatch data over time, and how do the limitations of those measurements shape what I can conclude?
 
-> For monitoring change over time, consistent measurements and trends may be more useful than treating daily food and smartwatch calorie estimates as exact values.
+### Supporting questions
 
-The hypothesis is conditional, not a general rule. A stable bias may matter little when estimating a trend, but it can matter when judging an absolute target. Also, body weight measures mass; it is not a direct measure of fat mass.
+- What trends and patterns are visible when the records are aligned over time?
+- How complete and consistent are the records, and what does each source actually measure or estimate?
+- Do conclusions change when I use longer-term summaries rather than daily values, or when I account for incomplete periods?
+- Which apparent disagreements between sources can be explained by measurement limitations, timing, or missingness?
+- What practical interpretation of the data is useful for my own decisions, without treating estimates as exact?
 
-### Important distinction
+These questions can be narrowed once the data coverage and relevant literature are understood.
 
-The three sources do not measure the same thing:
+### Starting expectation
 
-- The scale records body weight.
-- The food log records food entries and estimates of intake, subject to what was logged and how portions were estimated.
-- The smartwatch estimates activity or energy expenditure according to its device and methods.
+The broad expectation is that longer-term weight change may be broadly compatible with patterns in recorded intake and estimated expenditure, while daily numbers may not line up cleanly. This is an expectation to examine, not a result to assume. The records may be incomplete, the estimates may be biased, and the observed pattern may not support a clear interpretation.
 
-Do not assume that subtracting smartwatch calories from logged food calories gives a precise measure of energy balance. The comparison can be explored, but its uncertainty and interpretation need to be explicit.
+## What This Project Can Contribute
 
-## The Research Workflow
+The basic energy-balance principle is not the novelty. A useful applied contribution could be a transparent, data-backed case study showing:
 
-### 1. Start with a decision, not a topic
+- what everyday tracking sources actually provide;
+- how a familiar model meets incomplete and imprecise measurements;
+- how choices such as aggregation and data-quality rules affect the apparent story;
+- what conclusions remain reasonable—and which tempting conclusions are not supported;
+- how a person can use the numbers without treating every displayed calorie as ground truth.
 
-“Fat loss” is a topic. A practical decision is more specific.
+The strength of the work is not that one person's data represents everyone. It is that readers can see the data, the measurement context, the reasoning, and the limits together. Existing research can help explain which parts may transfer to other people or devices; it does not make this personal case statistically representative.
 
-Complete this sentence:
+Do not claim that no similar personal-data story exists until a focused search has checked that. A more defensible point of difference may be the particular combination of data sources and the transparent account of their limitations.
 
-> I want to decide whether / how to __________________, because __________________.
+## Keep the Concepts Distinct
 
-Then identify what is uncertain:
+Use these terms precisely:
 
-- Which number or trend do I rely on now?
-- What might make it misleading?
-- What other explanation could account for the pattern?
-- What evidence would make me change my current approach?
+- **Behavioural consistency:** how regularly a behaviour or logging practice occurs.
+- **Measurement consistency / repeatability:** whether repeated measurements under similar conditions agree.
+- **Precision:** the degree of agreement among repeated measurements.
+- **Accuracy:** how close a measurement is to an appropriate reference or true value.
+- **Completeness:** whether the expected records are present.
+- **Trend:** a pattern over time, which may be more useful than a single reading but still depends on data quality and the chosen summary.
 
-A useful question investigates an uncertainty that could affect a decision. It does not have to discover a new biological mechanism.
+Consistency of behaviour, consistency of measurement, and measurement accuracy are not interchangeable. If investigating one of them, define how it will be represented in the data. Do not make the broad claim that “consistency and precision matter more” unless the project has a clear comparison and outcome that could support it.
 
-### 2. Define the question and its scope
+## Research Workflow
 
-Specify:
+### 1. Establish the practical question
 
-- **Who or what:** initially, your own records and experience.
-- **Measures:** weight, logged food, smartwatch activity or energy estimates.
-- **Period:** the dates included and why.
-- **Decision:** what kind of personal decision the evidence might inform.
-- **Out of scope:** for example, proving that a particular behaviour caused weight loss or that the result applies to everyone.
+Begin with the problem of interpreting numbers, not with a promise to confirm a conclusion:
 
-Keep the question small enough to answer with the data available. If it contains several distinct uncertainties, split it into a primary question and secondary questions.
+> I want to understand what my tracking data can tell me about energy balance and weight change, and where the measurements make that interpretation uncertain.
 
-### 3. Review literature before analysing results
+Write down:
 
-Do a focused initial search before deciding how to interpret your data. The purpose is to learn:
+- What would I like to understand or decide?
+- Which numbers do I currently rely on?
+- What assumptions do I make about those numbers?
+- What finding would surprise me or change my interpretation?
 
-- How similar measures have been validated or evaluated.
-- What kinds of error, missingness, and variation are known.
-- What methods are used to summarise repeated measurements.
-- Which populations, products, and settings the evidence concerns.
-- Where the findings agree, differ, or leave uncertainty.
+### 2. Review relevant literature before the main analysis
 
-Search for relevant evidence on topics such as:
+Use an initial literature review to understand the model, the instruments, and the interpretation problem. Search separately for:
 
-- Consumer wearable estimates of energy expenditure.
-- Dietary self-monitoring, including completeness and estimation error.
-- Self-weighing and the interpretation of weight trends.
-- The effects of tracking burden and feedback on behaviour, where relevant.
+- energy balance and dynamic changes in body weight;
+- consumer wearable estimates of energy expenditure and their validation;
+- dietary self-report or food logging, including omissions and estimation error;
+- self-weighing, short-term weight variability, and trend interpretation;
+- practical use of self-monitoring, if it informs the intended audience or decision.
 
-Keep a simple evidence table. For each useful study, record its question, participants, device or measurement method, comparison standard, time period, main finding, limitations, and relevance to this project. A finding about one watch, population, or outcome may not transfer to another.
+For each useful source, record its question, population, measurement methods, comparison standard (if any), main findings, limitations, and relevance to this project. Check whether the study concerns the same kind of device, metric, and use. Evidence about step counts, for example, does not automatically validate calorie expenditure estimates.
 
-The first search informs the plan; it does not dictate what your data must show. After analysis, a focused follow-up search can help interpret unexpected findings. Note when that search happened so exploratory explanations are not presented as if they were planned in advance.
+The literature should inform the question and analysis, not predetermine the result. After seeing the findings, a targeted follow-up search can help interpret unexpected patterns; label explanations developed afterwards as exploratory.
 
-### 4. Decide what counts as evidence
+### 3. Define the case and its boundaries
 
-Before inspecting the results closely, write down:
+Specify before analysis:
 
-- The main measure or outcome you will examine.
-- How records will be grouped over time.
-- How missing, duplicated, or implausible records will be handled.
-- What counts as enough coverage to interpret a period.
-- Which comparisons you plan to make.
-- What result would weaken or change your hypothesis.
+- the person and data sources covered;
+- the dates included and why;
+- the unit and meaning of each record;
+- what counts as a complete day or period, if relevant;
+- the primary outcome or trend to describe;
+- the comparisons planned;
+- what the project will not claim.
 
-Preserve source values and provenance so that a cleaned or summarised value can be traced back to its origin. An absent record is not automatically a zero. A logged value is not automatically a complete or accurate measurement.
+This project can describe patterns in one person's observational records. It cannot isolate the causal effect of a behaviour, determine an exact energy deficit from consumer-device outputs, or establish what will happen to an average person.
 
-For this project, possible comparisons include daily readings versus a weekly summary, or examining whether the interpretation of progress changes when smartwatch calorie estimates are included. Treat these as comparisons between measures and interpretations, not as access to a known “true” daily calorie balance.
+### 4. Understand the measurement chain
 
-### 5. Inspect and analyse the data
+For each source, document:
 
-Start with data quality before drawing conclusions:
+| Source | What is recorded | What it does not establish by itself |
+|---|---|---|
+| Scale | A body-weight reading at a time and under particular conditions | Body-fat change or the cause of a weight change |
+| Food log | Items entered and their associated intake estimates | Complete or exact energy intake |
+| Smartwatch | Device-specific activity or energy estimates | Exact total energy expenditure or energy balance |
 
-- What dates and sources are covered?
-- Are there gaps, duplicates, or changes in collection?
-- Are units, timestamps, and record meanings clear?
-- Does each source record a daily value, an event, or something else?
-- Are the observations comparable across the selected period?
+Confirm the actual fields, units, timestamps, and semantics in your exports; do not assume a field means what its display label suggests. Preserve raw values and provenance. An absent record is not automatically zero, and a recorded value is not automatically accurate or complete.
 
-Then use summaries and visualisations that match the question. Check whether a conclusion changes under reasonable alternatives, such as a different time aggregation or exclusion of incomplete periods. Report that sensitivity; do not hide a result because it complicates the story.
+### 5. Write a simple analysis plan
 
-Separate three layers in your notes:
+Before examining results in detail, record:
+
+- the main question and descriptive measure;
+- how data from different sources will be aligned in time;
+- how trends will be summarised;
+- how gaps, duplicates, and incomplete periods will be handled;
+- which comparisons are primary and which are exploratory;
+- what plausible alternative explanations could affect interpretation;
+- what result would weaken your starting expectation.
+
+Prefer a small number of interpretable summaries. Daily values can be useful for inspecting variability and coverage; longer-term summaries can help describe trends. Neither should be presented as a direct measurement of daily energy balance.
+
+### 6. Check the data before interpreting it
+
+Inspect:
+
+- coverage by source and date;
+- missing, duplicated, malformed, or changing records;
+- units, time zones, and timestamp alignment;
+- whether records represent daily totals, events, or estimates;
+- whether periods being compared have comparable coverage.
+
+Keep the raw data distinct from cleaned and aggregated data. Make transformations reproducible so that a different quality rule or summary can be checked later.
+
+### 7. Analyse patterns and sensitivity
+
+Describe the data before offering an explanation. Plot or summarise the aligned time series, then ask:
+
+- What changes are visible, and over what time scale?
+- Do the sources tell a consistent story, or do they disagree?
+- Does the interpretation change with another reasonable aggregation or inclusion rule?
+- Could missing entries, measurement error, timing, or normal weight variation explain the pattern?
+- Which conclusions are robust to these reasonable choices, and which are fragile?
+
+Separate three layers:
 
 | Layer | Example |
 |---|---|
-| Observation | The weekly weight summary moved in a particular direction over this period. |
-| Interpretation | The pattern may indicate a sustained change, but short-term variation and missing records limit confidence. |
-| Decision | I will use this summary for the next review, while treating the smartwatch calorie estimate as contextual rather than exact. |
+| Observation | The recorded weight trend declined over this period. |
+| Interpretation | This is compatible with weight loss, but the records do not identify the precise energy deficit or explain all short-term variation. |
+| Practical implication | For my own review, I will use the longer-term weight trend and treat device calorie estimates as uncertain context. |
 
-### 6. Compare your case with the literature
+Association between recorded intake, estimated expenditure, and weight change is not proof of causation. A simple subtraction of logged food calories and smartwatch calories should not be treated as a validated measure of energy balance.
 
-Ask:
+### 8. Compare with the literature
 
-- Is the pattern consistent with studies using similar measures and populations?
-- Could different devices, protocols, or definitions explain a difference?
-- Does the literature support the measurement method, the interpretation, or the practical recommendation? These are different claims.
-- Which parts of the finding appear specific to this case?
+Use prior studies to assess whether your observations are plausible and what might limit transfer:
 
-Use literature to assess transferability, not to make your personal data statistically representative. A personal case can illustrate a practical issue and help test a workflow; population-level recommendations require suitable evidence from other people as well.
+- Were similar metrics and devices studied?
+- Were those measures compared with a suitable reference?
+- Does the study support the measurement, the interpretation, or a behavioural recommendation? These are separate claims.
+- Could differences in population, device version, protocol, or data completeness explain different results?
 
-### 7. Draw a bounded conclusion
+The literature can provide broader context. Your case can illustrate how the measurement problem played out for you. Keep those evidence roles distinct.
 
-Use wording that matches the evidence:
+### 9. State a bounded conclusion
 
-- **Personal finding:** “In my records, this summary was more stable over this period.”
-- **Literature context:** “This is consistent with studies that evaluated similar measures under these conditions.”
-- **Practical implication:** “For my weekly review, I will give more weight to this trend and treat these estimates cautiously.”
-- **Limit:** “This single-person case does not show that the same approach works for everyone.”
+Report what the evidence supports at each level:
 
-Avoid claims that the data cannot establish, especially causal claims from observational personal records. Changes in weight and recorded behaviours can coincide without demonstrating that one caused the other.
+1. **Observed in this case:** the patterns and data-quality facts.
+2. **Interpretation:** how those observations fit, or fail to fit, the energy-balance model, given measurement uncertainty.
+3. **Practical lesson:** what you would do differently when interpreting your own tracking data.
+4. **Broader context:** what relevant literature suggests, with its population and device limitations.
+5. **Unresolved:** what the available data cannot establish.
 
-## Maintaining Objectivity
+If the result aligns with expectations, explain how strongly and what alternative explanations remain. If it does not align, do not force a reconciliation: investigate the records, methods, and possible explanations, then report the uncertainty.
 
-Objectivity does not require having no personal stake. It requires making the reasoning inspectable and being willing to revise it.
+## Objectivity in a Personal Project
 
-Before analysis:
+Having a personal stake does not prevent useful research. Make the reasoning inspectable:
 
-- Record your current expectation.
+**Before analysis**
+
+- Write down your expectation and why you hold it.
 - Record at least one plausible alternative explanation.
-- State what result would change your mind.
-- Decide which analysis is primary and which is exploratory.
+- State what result would make you reconsider.
+- Decide which analyses are planned and which may be exploratory.
 
-During analysis:
+**During analysis**
 
-- Keep raw and transformed values distinguishable.
+- Preserve source data and document transformations.
 - Record exclusions, assumptions, and changes to the plan.
-- Include results that disagree with your expectation.
-- Distinguish measured values from estimates and interpretations.
+- Include discordant results and inconvenient data-quality findings.
+- Distinguish measurements, estimates, interpretations, and decisions.
 
-After analysis:
+**When writing**
 
-- Explain uncertainty and missingness.
-- Compare the result with relevant literature, including conflicting evidence.
-- State what you would do differently next time.
+- Separate what your records show from what you infer.
+- Compare fairly with relevant and conflicting literature.
+- Do not strengthen a claim merely to make the story more compelling.
 
-## Writing the Findings
+## Article Structure
 
-A practical article or report can use this structure:
+A practical article or report could follow this narrative:
 
-1. **Practical problem:** What decision or confusion motivated the work?
-2. **Question:** What did you investigate, and what was out of scope?
-3. **Context:** What relevant research says about the measures and tracking approach.
-4. **Data and method:** Sources, period, definitions, quality checks, and analysis.
-5. **Results:** What was observed, including gaps and disagreements between sources.
-6. **Interpretation:** What the result suggests for this case and how it compares with the literature.
-7. **Practical guidance:** What a reader might take away, with clear qualifications.
-8. **Limitations:** Single-person data, source-specific behaviour, measurement error, missingness, and lack of causal inference.
+1. **The familiar model:** energy balance is well established.
+2. **The everyday problem:** tracking tools offer numbers, but their meaning and quality differ.
+3. **The question:** what can this person's real-world records show about the model?
+4. **The evidence:** sources, dates, coverage, data-quality checks, and analysis choices.
+5. **The result:** what patterns appeared, including conflicts and gaps.
+6. **The interpretation:** how measurement limitations shape the apparent relationship.
+7. **The practical takeaway:** how to use such numbers without over-trusting or dismissing them.
+8. **The boundary:** what this case cannot say about causation or other people.
 
-If writing for a general audience, distinguish:
+The story should be determined by the results. It may support the starting expectation, complicate it, or leave the relationship too uncertain to interpret. Each of those can produce a useful account if the method and limits are clear.
 
-- What happened in your own case.
-- What prior studies suggest more broadly.
-- What remains uncertain.
+## One-Page Working Proposal
 
-The most useful general-audience message may be about how to use numbers without overinterpreting them, rather than a claim that your personal results predict everyone else's outcome.
-
-## A One-Page Working Protocol
-
-Fill this in before the main analysis:
+Complete this before the main analysis and revise it when new evidence warrants:
 
 ```text
-Practical decision:
+Working title:
 
-Why this decision matters:
+Practical problem:
+
+Aim:
 
 Primary research question:
 
-Provisional hypothesis, if useful:
+Supporting questions:
 
-What would change my mind:
+Starting expectation (not a required conclusion):
 
-Data sources and what each actually measures:
+Data sources, fields, units, and what they measure:
 
-Period and inclusion rules:
+Dates and inclusion rules:
 
-Primary outcome or summary:
+Primary summaries and planned comparisons:
 
-Planned comparisons:
+Data-quality checks:
 
-Known limitations and alternative explanations:
+Relevant literature and search terms:
 
-Literature search terms and scope:
+Alternative explanations:
 
-Privacy steps:
+What evidence would change my interpretation:
 
-What I will not claim:
+Privacy and data-handling steps:
+
+Claims this case cannot support:
 ```
 
-## When Is the Work Complete?
+## Completion Criteria
 
-The investigation is complete enough for a useful report when:
+The work is ready to communicate when:
 
-- The question is answered as far as the available data allows.
-- The data limitations and analysis choices are documented.
-- The conclusion distinguishes observation from interpretation.
-- The comparison with literature is relevant and fairly represented.
-- The practical implication is clear, including when no change is justified.
-- A reader can tell which claims are personal findings and which are supported by broader evidence.
+- the question and scope are explicit;
+- each source's meaning and limitations are described;
+- data coverage and analysis choices are reproducible;
+- results are separated from interpretation and practical advice;
+- relevant literature is used as context rather than confirmation;
+- uncertainty and alternative explanations are reported;
+- readers can distinguish this personal case from broader evidence.
 
-This guide complements the [live workbook](./00-live-workbook.md), especially its modules on data reliability, analysis, and statistics. Use it as a working method, not a checklist that must be completed before learning or building anything.
+This guide complements the [live workbook](./00-live-workbook.md), especially its modules on data reliability, analysis, and statistics. It is a working method: update the question as the evidence clarifies what can responsibly be answered.
