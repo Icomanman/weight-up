@@ -11,6 +11,8 @@ For anyone looking to manage their weight, consumer electronics like fitness tra
 
 ## Background
 
+Start with the tracking...
+
 Energy balance can be described as the relationship between the calories consumed through food intake (including beverages) and the calories expended. In the context of weight management, calories expended is estimated through the Total Daily Energy Expenditure (TDEE) which is compared against consumption from calorie tracking. Understanding this simple concept helps explain and predict a person's weight trends over time.
 
 ### Energy Balance, NEAT and TDEE
