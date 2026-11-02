@@ -11,11 +11,11 @@ Consumer tools like fitness trackers and smart scales may provide enough informa
 
 ## Background
 
-### Mechanics of Weight Loss and Gain
+### Basic Mechanics of Weight Loss and Gain
 
-Start with the tracking...
+The human body requires a specific amount of energy requirements to maintain its basic functions. Even if a person does not engage in any form of physical activity, the body still needs energy to support essential processes. This is known as the basal metabolic rate (BMR), which is commonly estimated on a daily basis. This is one side of the equation of energy balance. In order to determine the whether a person gains, loses or maintains weight, we need to compare the TDEE against food (and beverages) intake.
 
-Energy balance can be described as the relationship between the calories consumed through food intake (including beverages) and the calories expended. In the context of weight management, calories expended is estimated through the Total Daily Energy Expenditure (TDEE) which is compared against consumption from calorie tracking. Understanding this simple concept helps explain and predict a person's weight trends over time.
+Then comes tracking...
 
 ### Energy Balance, NEAT and TDEE
 
