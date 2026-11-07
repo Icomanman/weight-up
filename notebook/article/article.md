@@ -11,19 +11,21 @@ Consumer tools like fitness trackers and smart scales may provide enough informa
 
 ## Background
 
-### Basic Mechanics of Weight Loss and Gain
+### Energy Balance and Basic Mechanics of Weight Loss and Gain
 
-The human body requires a specific amount of energy requirements to maintain its basic functions. Even if a person does not engage in any form of physical activity, the body still needs energy to support essential processes. This is known as the basal metabolic rate (BMR), which is commonly estimated on a daily basis. This is one side of the equation of energy balance. In order to determine the whether a person gains, loses or maintains weight, we need to compare the TDEE against food (and beverages) intake.
+Our body requires a specific amount of energy requirements as we go about our daily living. Such energy requirements vary from person to person. To help us understand energy balance and weight management on a personal level, we have look at basic components of a person's TDEE. TDEE is commonly broken down into parts that contribute to energy expenditure: Basal Metabolic Rate (BMR), Non-Exercise Activity Thermogenesis (NEAT), and exercise and other physical activities.
 
-Then comes tracking...
-
-### Energy Balance, NEAT and TDEE
+The first and the biggest factor is known as the basal metabolic rate (BMR). Even if a person does not engage in any form of physical activity, the body still needs this energy to support its essential processes. Next is NEAT. Think of it
 
 TDEE is calculated from different factors that vary from person to person. 
 
 This can be broken down through basal metabolic rate (BMR), physical activity, and the thermic effect of food (TEF). When energy intake equals energy expenditure, body weight remains stable. A positive energy balance, where intake exceeds expenditure, leads to weight gain, while a negative energy balance results in weight loss.
 
 Understanding energy balance is crucial for effective weight management. By monitoring and adjusting caloric intake and expenditure, individuals can work towards their desired body weight and maintain overall health.
+
+---
+
+This is one side of the equation of energy balance. In order to determine the whether a person gains, loses or maintains weight, we need to compare the TDEE against food (and beverages) intake.
 
 ### Exercise and Physical Activity
 
